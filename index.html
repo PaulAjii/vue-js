@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue - Instance</title>
+
+    <style>
+      .pinkBG {
+        background-color: lightpink;
+      }
+
+      .itemFound li {
+        text-decoration: line-through;
+        background-color: grey !important;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1 :style="h1Style">{{ message }}</h1>
+
+      <div :class="vueClass">This has a binded class</div>
+
+      <p :style="{ color: inStock ? 'blue' : 'red' }">
+        {{ inStock ? "In stock" : "Out Of Stock" }}
+      </p>
+
+      <button @click="inStock = !inStock">
+        Change Stock
+      </button>
+
+      <h3>Lists of Schools</h3>
+      <ul>
+        <li v-for="(school, index) in schools.sort()">
+          {{ ++index + ":" }} {{ school.toUpperCase() }}
+        </li>
+      </ul>
+
+      <p @click="writeText">
+        {{ text }}
+      </p>
+
+      <div @mousemove="mousePos">
+        xPos: {{ xPos }} <br />
+        yPos: {{ yPos }}
+      </div>
+
+      <!-- Form -->
+      <form @submit.prevent="addItem">
+        <p>Add Items</p>
+        <p>
+          Item name: 
+          <input type="text" required v-model="itemName">
+        </p>
+        <p>
+          How many: 
+          <input type="number" v-model="itemNumber">
+        </p>
+        <p>
+          Important?
+          <input type="checkbox" v-model="itemImportant">
+        </p>
+        <button type="submit">Add Item</button>
+      </form>
+
+      <p>shopping list</p>
+      <ul>
+        <li
+          v-for="item in shoppingList"
+          :style="{
+            backgroundColor: item.important ? 'green' : 'red',
+            color: 'white'
+          }"
+          @click="item.found = !item.found"
+          v-show="!item.found"
+        >
+          {{ item.name + " - "}} {{ item.number }}, {{ item.found}}
+        </li>
+      </ul>
+
+      <ul class="itemFound">
+        <li
+          v-for="item in shoppingList"
+          :style="{
+            backgroundColor: item.important ? 'green' : 'red',
+            color: 'white',
+          }"
+          @click="item.found = !item.found"
+          v-show="item.found"
+        >
+          {{ item.name + " - "}} {{ item.number }}, {{ item.found}}
+        </li>
+      </ul>
+
+      <div>
+        <input
+          type="text"
+          name="inputText"
+          id="inputText"
+          v-model="inputText"
+        />
+        <p>{{ inputText }}</p>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <script>
+      const app = Vue.createApp({
+        data() {
+          return {
+            message: "Hello World!",
+            vueClass: "pinkBG",
+            h1Style: {
+              fontSize: "30px",
+              color: "green",
+            },
+            inStock: true,
+            schools: [
+              "Federal Unis",
+              "Private Unis",
+              "State Unis",
+              "Colleges of Education",
+              "Polytechnics"
+            ],
+            text: "This is a random text",
+            xPos: 0,
+            yPos: 0,
+
+            itemName: null,
+            itemNumber: null,
+            itemImportant: false,
+            shoppingList: [
+              {
+                name: 'Tomatoes',
+                number: 6,
+                important: false,
+                found: false
+              }
+            ],
+            inputText: "Random Text"
+          };
+        },
+
+        methods: {
+          writeText() {
+            this.text = "New text from Vue Methods"
+          },
+
+          mousePos(e) {
+            this.xPos = e.offsetX
+            this.yPos = e.offsetY
+          },
+
+          addItem() {
+            const item = {
+              name: this.itemName,
+              number: this.itemNumber,
+              important: this.itemImportant,
+              found: false,
+            }
+            this.shoppingList.push(item)
+            this.itemName = null
+            this.itemNumber = null
+            this.itemImportant = false
+          }
+        }
+      });
+
+      app.mount("#app");
+    </script>
+  </body>
+</html>
