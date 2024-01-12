@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import Aside from './components/Aside.vue'
 import Home from './components/Home.vue'
 
@@ -33,7 +33,7 @@ const getRandomUser = async () => {
 
     const newUser = {
       id: fetchRandomNumber(),
-      name: computed(() => user.name.first + " " + user.name.last),
+      name: user.name.first + " " + user.name.last,
       money: fetchRandomNumber()
     }
     people.value.push(newUser)
